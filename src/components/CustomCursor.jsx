@@ -5,7 +5,12 @@ import React, { useEffect, useState, useRef } from 'react';
  * Strictly active on desktop pointers; fully disabled on touch/coarse pointers and prefers-reduced-motion.
  */
 export default function CustomCursor() {
-  const [mounted, setMounted] = useState(false);
+  const [mounted] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(pointer: fine)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -18,19 +23,14 @@ export default function CustomCursor() {
   const animFrameId = useRef(null);
 
   useEffect(() => {
-    // Check if pointer is fine (mouse/desktop) and reduced motion is not requested
-    const isFinePointer = window.matchMedia('(pointer: fine)').matches;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (!isFinePointer || prefersReducedMotion) {
+    if (!mounted) {
       return;
     }
 
-    setMounted(true);
-
     const onMouseMove = (e) => {
       mousePos.current = { x: e.clientX, y: e.clientY };
-      if (!visible) setVisible(true);
+      // React bails out on identical state, so this is cheap on every move
+      setVisible(true);
 
       if (cursorDotRef.current) {
         cursorDotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
@@ -89,7 +89,7 @@ export default function CustomCursor() {
       document.removeEventListener('mouseover', onMouseOver);
       if (animFrameId.current) cancelAnimationFrame(animFrameId.current);
     };
-  }, [visible]);
+  }, [mounted]);
 
   if (!mounted) return null;
 

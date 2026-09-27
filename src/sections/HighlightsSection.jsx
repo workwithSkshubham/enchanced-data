@@ -14,7 +14,8 @@ export default function HighlightsSection({ onOpenRegister }) {
         if (entries[0].isIntersecting && !hasAnimated) {
           setHasAnimated(true);
 
-          const targets = [500000, 1200, 36, 24];
+          // Read targets from the central event configuration (no duplication)
+          const targets = EVENT_DATA.stats.map((stat) => stat.value);
           const duration = 1600;
           const steps = 40;
           const stepTime = duration / steps;
@@ -63,12 +64,19 @@ export default function HighlightsSection({ onOpenRegister }) {
     cardEl.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)`;
   };
 
-  const highlightIcons = [
-    <Terminal size={22} className="text-emerald" />,
-    <Sparkles size={22} className="text-violet" />,
-    <Layers size={22} className="text-spark" />,
-    <Network size={22} className="text-cyan" />,
-  ];
+  const renderHighlightIcon = (index) => {
+    switch (index) {
+      case 0:
+        return <Terminal size={22} className="text-emerald" />;
+      case 1:
+        return <Sparkles size={22} className="text-violet" />;
+      case 2:
+        return <Layers size={22} className="text-spark" />;
+      case 3:
+      default:
+        return <Network size={22} className="text-cyan" />;
+    }
+  };
 
   return (
     <section id="highlights" className="section-spacing highlights-section" aria-label="Event Highlights">
@@ -92,10 +100,22 @@ export default function HighlightsSection({ onOpenRegister }) {
               className="card-vault-3d highlight-interactive-card"
               onMouseMove={(e) => handleCardMouseMove(e, e.currentTarget)}
               onMouseLeave={(e) => handleCardMouseLeave(e.currentTarget)}
+              onClick={() => {
+                if (onOpenRegister) onOpenRegister({ track: item.title });
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  if (onOpenRegister) onOpenRegister({ track: item.title });
+                }
+              }}
+              aria-label={`Highlight ${item.title} — click to register`}
             >
               <div className="card-top-row">
                 <span className="card-numeral font-mono">{item.id}</span>
-                <span className="card-icon-pill">{highlightIcons[idx]}</span>
+                <span className="card-icon-pill">{renderHighlightIcon(idx)}</span>
               </div>
 
               <div className="card-body">

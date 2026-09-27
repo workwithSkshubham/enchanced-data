@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Maximize2, X, ChevronLeft, ChevronRight, Camera } from 'lucide-react';
 import { EVENT_DATA } from '../data/eventData';
+import { useModalA11y } from '../hooks/useModalA11y';
 
 export default function GallerySection() {
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  const lightboxRef = useRef(null);
 
   const images = EVENT_DATA.gallery;
 
@@ -18,17 +20,21 @@ export default function GallerySection() {
     setLightboxIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
   };
 
-  // Keyboard navigation for lightbox
+  // ESC key, focus trap and background scroll lock for the lightbox
+  useModalA11y(lightboxIndex !== null, closeLightbox, lightboxRef);
+
+  // Arrow keyboard navigation between gallery archives
   useEffect(() => {
+    if (lightboxIndex === null) return;
+
     const handleKeyDown = (e) => {
-      if (lightboxIndex === null) return;
-      if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowLeft') prevImage();
       if (e.key === 'ArrowRight') nextImage();
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lightboxIndex]);
 
   const handleCardMouseMove = (e, el) => {
@@ -102,6 +108,7 @@ export default function GallerySection() {
           aria-label="Image Lightbox Viewer"
         >
           <div
+            ref={lightboxRef}
             className="lightbox-container"
             onClick={(e) => e.stopPropagation()}
           >

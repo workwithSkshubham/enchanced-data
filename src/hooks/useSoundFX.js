@@ -104,15 +104,15 @@ export function useSoundFX() {
 
   const toggleAudio = () => {
     initAudio();
-    setIsAudioEnabled((prev) => {
-      const next = !prev;
-      if (next) {
-        startDrone();
-      } else {
-        stopDrone();
-      }
-      return next;
-    });
+    // Side effects stay outside the state updater so React StrictMode
+    // double-invocation cannot stack two drone layers.
+    const next = !isAudioEnabled;
+    if (next) {
+      startDrone();
+    } else {
+      stopDrone();
+    }
+    setIsAudioEnabled(next);
   };
 
   useEffect(() => {

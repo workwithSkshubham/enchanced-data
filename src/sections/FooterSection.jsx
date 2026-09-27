@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUp, Terminal, MapPin } from 'lucide-react';
+import { ArrowUp, MapPin } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, TwitterIcon, InstagramIcon, DiscordIcon } from '../components/SocialIcons';
 import { EVENT_DATA } from '../data/eventData';
 

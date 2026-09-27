@@ -9,14 +9,24 @@ import * as THREE from 'three';
  */
 export default function VibraniumCore3D() {
   const mountRef = useRef(null);
-  const [webGLSupported, setWebGLSupported] = useState(true);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [reducedMotion] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+  const [webGLSupported] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    try {
+      const canvas = document.createElement('canvas');
+      return !!(
+        window.WebGLRenderingContext &&
+        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+      );
+    } catch {
+      return false;
+    }
+  });
 
   useEffect(() => {
-    // Check reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-      setReducedMotion(true);
+    if (reducedMotion || !webGLSupported) {
       return;
     }
 
@@ -32,7 +42,6 @@ export default function VibraniumCore3D() {
         powerPreference: 'high-performance',
       });
     } catch {
-      setWebGLSupported(false);
       return;
     }
 
@@ -263,7 +272,7 @@ export default function VibraniumCore3D() {
       particleMat.dispose();
       renderer.dispose();
     };
-  }, []);
+  }, [reducedMotion, webGLSupported]);
 
   // Graceful Fallback if WebGL or reduced-motion is active
   if (!webGLSupported || reducedMotion) {
@@ -272,18 +281,18 @@ export default function VibraniumCore3D() {
         <svg viewBox="0 0 200 200" className="core-fallback-svg">
           <defs>
             <linearGradient id="fallbackGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#19E68C" />
-              <stop offset="60%" stop-color="#8B5CF6" />
-              <stop offset="100%" stop-color="#FF8A3D" />
+              <stop offset="0%" stopColor="#19E68C" />
+              <stop offset="60%" stopColor="#8B5CF6" />
+              <stop offset="100%" stopColor="#FF8A3D" />
             </linearGradient>
             <filter id="fallbackGlow">
               <feGaussianBlur stdDeviation="6" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
           </defs>
-          <circle cx="100" cy="100" r="82" stroke="rgba(25, 230, 140, 0.3)" stroke-width="1.5" stroke-dasharray="8 6" fill="none" />
-          <polygon points="100,35 155,67 155,133 100,165 45,133 45,67" stroke="#19E68C" stroke-width="2" fill="none" opacity="0.8" />
-          <polygon points="100,50 140,100 100,150 60,100" stroke="#8B5CF6" stroke-width="2" fill="none" opacity="0.8" />
+          <circle cx="100" cy="100" r="82" stroke="rgba(25, 230, 140, 0.3)" strokeWidth="1.5" strokeDasharray="8 6" fill="none" />
+          <polygon points="100,35 155,67 155,133 100,165 45,133 45,67" stroke="#19E68C" strokeWidth="2" fill="none" opacity="0.8" />
+          <polygon points="100,50 140,100 100,150 60,100" stroke="#8B5CF6" strokeWidth="2" fill="none" opacity="0.8" />
           <circle cx="100" cy="100" r="14" fill="#19E68C" filter="url(#fallbackGlow)" opacity="0.9" />
           <circle cx="100" cy="100" r="6" fill="#FFFFFF" />
         </svg>

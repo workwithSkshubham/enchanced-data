@@ -1,0 +1,377 @@
+/* ==========================================================================
+   VIBRANIUM VAULT — Cinematic Effects Layer
+   Character emblems, cinematic background, nav underline motion,
+   timeline scrub progress, magnetic helpers.
+   Loaded after main.css & sections.css (see index.css aggregator).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Cinematic Background Atmosphere (behind content, barely visible)
+   -------------------------------------------------------------------------- */
+.cinematic-bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cine-silhouette {
+  position: absolute;
+  background-repeat: repeat-x;
+  background-position: bottom center;
+  opacity: 0.05;
+  filter: blur(3px);
+  will-change: transform;
+}
+
+/* Futuristic energy skyline silhouette (original vector) */
+.cine-silhouette.cine-1 {
+  left: -5%;
+  right: -5%;
+  bottom: -2%;
+  height: 42vh;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='300' viewBox='0 0 1200 300'%3E%3Cpath d='M0 300 L0 210 L60 210 L60 160 L110 160 L110 120 L150 120 L150 190 L210 190 L210 90 L240 90 L240 40 L260 40 L260 90 L290 90 L290 190 L360 190 L360 140 L420 140 L420 200 L480 200 L480 60 L505 60 L505 20 L530 20 L530 60 L555 60 L555 200 L640 200 L640 150 L700 150 L700 110 L760 110 L760 180 L820 180 L820 70 L850 70 L850 30 L875 30 L875 70 L905 70 L905 180 L980 180 L980 130 L1040 130 L1040 200 L1100 200 L1100 160 L1160 160 L1160 220 L1200 220 L1200 300 Z' fill='%2319E68C' fill-opacity='0.5'/%3E%3Ccircle cx='530' cy='70' r='6' fill='%238B5CF6'/%3E%3Ccircle cx='875' cy='80' r='5' fill='%23FF8A3D'/%3E%3C/svg%3E");
+  animation: cineDrift 60s linear infinite alternate;
+}
+
+/* Slow atmospheric energy wave */
+.cine-silhouette.cine-2 {
+  top: 8%;
+  left: -10%;
+  width: 60vw;
+  height: 30vh;
+  opacity: 0.04;
+  background-repeat: no-repeat;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Cpath d='M0 200 Q100 120 200 200 T400 200 T600 200 T800 200' fill='none' stroke='%238B5CF6' stroke-width='2'/%3E%3Cpath d='M0 240 Q100 160 200 240 T400 240 T600 240 T800 240' fill='none' stroke='%2319E68C' stroke-width='1.5'/%3E%3Cpath d='M0 280 Q100 200 200 280 T400 280 T600 280 T800 280' fill='none' stroke='%23FF8A3D' stroke-width='1'/%3E%3C/svg%3E");
+  animation: cineWave 34s ease-in-out infinite alternate;
+}
+
+@keyframes cineDrift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-120px); }
+}
+
+@keyframes cineWave {
+  from { transform: translateX(0) translateY(0); }
+  to { transform: translateX(60px) translateY(-24px); }
+}
+
+/* Cinematic vignette to focus the reading surface */
+.cine-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* --------------------------------------------------------------------------
+   2. Navbar — Animated underline, glow sweep & magnetic readiness
+   -------------------------------------------------------------------------- */
+.nav-link-item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--accent-emerald), var(--accent-violet));
+  box-shadow: 0 0 8px var(--accent-emerald-glow);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--transition-smooth);
+}
+
+.nav-link-item:hover::after,
+.nav-link-item.is-active::after {
+  transform: scaleX(1);
+}
+
+.nav-link-item:hover {
+  text-shadow: 0 0 18px rgba(25, 230, 140, 0.45);
+}
+
+.nav-register-btn.is-magnetic,
+.magnetic-target {
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   3. Character Energy Emblems (decorative, desktop/tablet only)
+   -------------------------------------------------------------------------- */
+.character-emblem-slot {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  display: block;
+  width: 90px;
+  height: 90px;
+  opacity: 0.28;
+  filter: drop-shadow(0 0 16px rgba(25, 230, 140, 0.15));
+}
+
+@media (min-width: 640px) {
+  .character-emblem-slot {
+    width: 125px;
+    height: 125px;
+    opacity: 0.38;
+  }
+}
+
+@media (min-width: 768px) {
+  .character-emblem-slot {
+    opacity: 0.48;
+  }
+}
+
+.emblem-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* --- Slot positioning per section (kept clear of content flow) --- */
+.slot-thor {
+  top: 12%;
+  left: -4%;
+  width: 130px;
+  height: 130px;
+  opacity: 0.55;
+}
+
+.slot-strange {
+  top: -6%;
+  right: 2%;
+  width: 190px;
+  height: 190px;
+  opacity: 0.4;
+}
+
+.slot-loki {
+  bottom: 4%;
+  left: -3%;
+  width: 160px;
+  height: 160px;
+  opacity: 0.42;
+}
+
+.slot-captain {
+  bottom: -4%;
+  right: -2%;
+  width: 150px;
+  height: 150px;
+  opacity: 0.45;
+}
+
+.slot-doom {
+  top: 4%;
+  right: 6%;
+  width: 170px;
+  height: 170px;
+  opacity: 0.3;
+}
+
+@media (min-width: 1280px) {
+  .slot-thor { width: 160px; height: 160px; }
+  .slot-strange { width: 220px; height: 220px; }
+  .slot-loki { width: 190px; height: 190px; }
+  .slot-captain { width: 180px; height: 180px; }
+  .slot-doom { width: 200px; height: 200px; }
+}
+
+/* --- Shared emblem motions --- */
+.emblem-ring-slow {
+  animation: emblemSpin 26s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.emblem-ring-slow-reverse {
+  animation: emblemSpinReverse 26s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.emblem-core-pulse {
+  animation: emblemPulse 2.4s ease-in-out infinite alternate;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+/* --- THOR: lightning pulses + electric flicker --- */
+.emblem-thor-svg .emblem-thor-bolt {
+  animation: thorFlicker 3.2s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.emblem-thor-svg .emblem-thor-sparks {
+  animation: thorSpark 1.8s ease-in-out infinite alternate;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.slot-thor {
+  animation: emblemFloat 7s ease-in-out infinite alternate;
+}
+
+/* --- DOOM: slow intimidating drift + smoke haze --- */
+.slot-doom {
+  animation: emblemFloatSlow 11s ease-in-out infinite alternate;
+}
+
+.emblem-doom-svg .emblem-doom-smoke {
+  animation: doomSmoke 6s ease-in-out infinite alternate;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.emblem-doom-svg .emblem-doom-eyes {
+  animation: doomGaze 4.5s ease-in-out infinite alternate;
+}
+
+/* --- LOKI: elegant floating + illusion particles --- */
+.slot-loki {
+  animation: emblemFloat 6s ease-in-out infinite alternate;
+}
+
+.emblem-loki-svg .emblem-loki-particles {
+  animation: lokiShimmer 2.6s ease-in-out infinite alternate;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+/* --- CAPTAIN AMERICA: shield rotation + kinetic trail --- */
+.emblem-captain-svg .emblem-captain-trail {
+  animation: emblemSpin 9s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.emblem-captain-svg .emblem-captain-star {
+  animation: emblemSpinReverse 14s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.slot-captain {
+  animation: emblemFloat 8s ease-in-out infinite alternate;
+}
+
+/* --- DOCTOR STRANGE: rotating portal + sparks --- */
+.emblem-strange-svg .emblem-strange-portal-outer {
+  animation: emblemSpin 12s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.emblem-strange-svg .emblem-strange-portal-inner {
+  animation: emblemSpinReverse 8s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.emblem-strange-svg .emblem-strange-sparks {
+  animation: strangeOrbit 5s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.slot-strange {
+  animation: emblemFloat 9s ease-in-out infinite alternate;
+}
+
+@keyframes emblemSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes emblemSpinReverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes emblemFloat {
+  from { transform: translateY(-8px); }
+  to { transform: translateY(10px); }
+}
+
+@keyframes emblemFloatSlow {
+  from { transform: translateY(-5px) rotate(-1.5deg); }
+  to { transform: translateY(7px) rotate(1.5deg); }
+}
+
+@keyframes emblemPulse {
+  from { transform: scale(0.85); opacity: 0.7; }
+  to { transform: scale(1.15); opacity: 1; }
+}
+
+@keyframes thorFlicker {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 6px rgba(255, 138, 61, 0.6)); }
+  42% { opacity: 1; }
+  46% { opacity: 0.35; }
+  50% { opacity: 1; filter: drop-shadow(0 0 14px rgba(255, 138, 61, 0.95)); }
+  54% { opacity: 0.55; }
+  58% { opacity: 1; }
+}
+
+@keyframes thorSpark {
+  from { opacity: 0.35; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1.12); }
+}
+
+@keyframes doomSmoke {
+  from { opacity: 0.4; transform: translateX(-4px) scale(0.96); }
+  to { opacity: 0.85; transform: translateX(5px) scale(1.05); }
+}
+
+@keyframes doomGaze {
+  from { opacity: 0.55; }
+  to { opacity: 1; filter: drop-shadow(0 0 5px rgba(25, 230, 140, 0.8)); }
+}
+
+@keyframes lokiShimmer {
+  from { opacity: 0.3; transform: scale(0.92) translateY(2px); }
+  to { opacity: 1; transform: scale(1.08) translateY(-3px); }
+}
+
+@keyframes strangeOrbit {
+  from { transform: rotate(0deg) scale(0.95); opacity: 0.55; }
+  50% { transform: rotate(180deg) scale(1.05); opacity: 1; }
+  to { transform: rotate(360deg) scale(0.95); opacity: 0.55; }
+}
+
+/* --------------------------------------------------------------------------
+   4. Timeline — Scroll-scrubbed axis illumination
+   -------------------------------------------------------------------------- */
+.timeline-axis-progress {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--accent-emerald) 0%, var(--accent-violet) 100%);
+  box-shadow: 0 0 12px rgba(25, 230, 140, 0.5);
+  transform-origin: top center;
+  transform: scaleY(0);
+}
+
+/* --------------------------------------------------------------------------
+   5. Reduced motion — disable all decorative effect animations
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-silhouette,
+  .cine-silhouette,
+  .character-emblem-slot,
+  .character-emblem-slot *,
+  .emblem-svg *,
+  .timeline-axis-progress {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .timeline-axis-progress {
+    transform: scaleY(1);
+  }
+
+  .cine-silhouette.cine-1,
+  .cine-silhouette.cine-2 {
+    animation: none !important;
+  }
+}

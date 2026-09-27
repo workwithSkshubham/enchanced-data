@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX, Menu, X, ArrowUpRight } from 'lucide-react';
 import { EVENT_DATA } from '../data/eventData';
+import { useMagnetic } from '../hooks/useMagnetic';
 
 export default function Navbar({ isAudioEnabled, toggleAudio, onOpenRegister }) {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const registerBtnRef = useMagnetic(0.22);
 
   const navLinks = [
     { label: 'ABOUT', href: '#about' },
@@ -41,6 +43,17 @@ export default function Navbar({ isAudioEnabled, toggleAudio, onOpenRegister }) 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Lock page scroll while the mobile drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prevOverflow;
+      };
+    }
+  }, [mobileMenuOpen]);
 
   const handleNavClick = (e, href) => {
     e.preventDefault();
@@ -134,8 +147,9 @@ export default function Navbar({ isAudioEnabled, toggleAudio, onOpenRegister }) 
 
             {/* Quick Register CTA Button */}
             <button
+              ref={registerBtnRef}
               onClick={onOpenRegister}
-              className="btn-vault btn-vault-primary nav-register-btn"
+              className="btn-vault btn-vault-primary nav-register-btn is-magnetic"
             >
               <span>REGISTER</span>
               <ArrowUpRight size={15} />

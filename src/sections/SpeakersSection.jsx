@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
-import { Sparkles, X, ArrowUpRight } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { X, ArrowUpRight } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, TwitterIcon } from '../components/SocialIcons';
 import { EVENT_DATA } from '../data/eventData';
+import { useModalA11y } from '../hooks/useModalA11y';
+import CharacterEmblem from '../components/CharacterEmblems';
 
 export default function SpeakersSection() {
   const [selectedSpeaker, setSelectedSpeaker] = useState(null);
+  const speakerModalRef = useRef(null);
+
+  const closeSpeakerModal = () => setSelectedSpeaker(null);
+
+  // ESC key, focus trap and background scroll lock for the dossier modal
+  useModalA11y(Boolean(selectedSpeaker), closeSpeakerModal, speakerModalRef);
 
   const handleCardMouseMove = (e, el) => {
     const rect = el.getBoundingClientRect();
@@ -14,6 +22,9 @@ export default function SpeakersSection() {
 
   return (
     <section id="speakers" className="section-spacing speakers-section" aria-label="Keynote Speakers & Mentors">
+      {/* Doctor Doom Armored Throne Sigil */}
+      <CharacterEmblem type="doom" slotClass="slot-doom" />
+
       <div className="vault-container">
         {/* Section Header */}
         <div className="section-meta-header">
@@ -28,7 +39,7 @@ export default function SpeakersSection() {
 
         {/* 4 Speaker Editorial Cards */}
         <div className="speakers-grid">
-          {EVENT_DATA.speakers.map((spk, idx) => (
+          {EVENT_DATA.speakers.map((spk) => (
             <div
               key={spk.id}
               className="card-vault-3d speaker-card"
@@ -106,17 +117,18 @@ export default function SpeakersSection() {
       {selectedSpeaker && (
         <div
           className="vault-modal-backdrop"
-          onClick={() => setSelectedSpeaker(null)}
+          onClick={closeSpeakerModal}
           role="dialog"
           aria-modal="true"
           aria-labelledby="speaker-modal-title"
         >
           <div
+            ref={speakerModalRef}
             className="vault-modal-card speaker-modal-content"
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => setSelectedSpeaker(null)}
+              onClick={closeSpeakerModal}
               className="modal-close-btn"
               aria-label="Close modal"
             >

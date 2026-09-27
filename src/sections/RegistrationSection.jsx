@@ -1,7 +1,6 @@
 import React from 'react';
-import { Sparkles, Terminal, Shield, ArrowRight } from 'lucide-react';
+import { Sparkles, Terminal, Shield } from 'lucide-react';
 import TicketPassGenerator from '../components/TicketPassGenerator';
-import { EVENT_DATA } from '../data/eventData';
 
 export default function RegistrationSection({ onOpenFullForm, selectedTrack }) {
   return (

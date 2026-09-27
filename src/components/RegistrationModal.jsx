@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { X, CheckCircle2, ShieldCheck, Sparkles, Send, ArrowRight } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { X, ShieldCheck, Send, ArrowRight } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { EVENT_DATA } from '../data/eventData';
+import { useModalA11y } from '../hooks/useModalA11y';
 
 export default function RegistrationModal({ isOpen, onClose, initialData = {} }) {
+  const modalCardRef = useRef(null);
   const [formData, setFormData] = useState({
     name: initialData.name || '',
     email: '',
@@ -17,27 +19,22 @@ export default function RegistrationModal({ isOpen, onClose, initialData = {} })
 
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
+  const [prevInitialData, setPrevInitialData] = useState(initialData);
 
-  useEffect(() => {
-    if (initialData.name) {
-      setFormData((prev) => ({
-        ...prev,
-        name: initialData.name,
-        track: initialData.track || prev.track,
-      }));
-    }
-  }, [initialData]);
+  if (
+    initialData &&
+    (initialData.name !== prevInitialData?.name || initialData.track !== prevInitialData?.track)
+  ) {
+    setPrevInitialData(initialData);
+    setFormData((prev) => ({
+      ...prev,
+      name: initialData.name || prev.name,
+      track: initialData.track || prev.track,
+    }));
+  }
 
-  // Handle ESC key to close modal
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  // ESC key, focus trap and background scroll lock
+  useModalA11y(isOpen, onClose, modalCardRef);
 
   if (!isOpen) return null;
 
@@ -83,6 +80,7 @@ export default function RegistrationModal({ isOpen, onClose, initialData = {} })
       aria-labelledby="reg-modal-title"
     >
       <div
+        ref={modalCardRef}
         className="vault-modal-card registration-modal-content"
         onClick={(e) => e.stopPropagation()}
       >

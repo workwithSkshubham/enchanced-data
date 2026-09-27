@@ -1,4 +1,4 @@
-# Logs
+# Logs & Debugging
 logs
 *.log
 npm-debug.log*
@@ -7,18 +7,54 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+.pnp
+.pnp.js
+
+# Production & Build Outputs
 dist
 dist-ssr
-*.local
+build
+out
+.vite
 
-# Editor directories and files
+# Local Environment Variables
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+*.env
+
+# Cache & Coverage
+.cache
+.eslintcache
+.stylelintcache
+coverage
+*.lcov
+
+# Editor & IDE Artefacts
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Agent & AI Artifacts
+.gemini
+.agents

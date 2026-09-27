@@ -1,6 +1,7 @@
 import React from 'react';
 import { Cpu, Terminal, Zap, Compass, CheckCircle2, ArrowRight } from 'lucide-react';
 import { EVENT_DATA } from '../data/eventData';
+import CharacterEmblem from '../components/CharacterEmblems';
 
 export default function AboutSection({ onOpenRegister }) {
   const pillars = [
@@ -28,6 +29,9 @@ export default function AboutSection({ onOpenRegister }) {
 
   return (
     <section id="about" className="section-spacing about-section" aria-label="About Vibranium Vault">
+      {/* Loki Energy & Illusion Sigil */}
+      <CharacterEmblem type="loki" slotClass="slot-loki" />
+
       <div className="vault-container">
         {/* Section Header */}
         <div className="section-meta-header">

@@ -222,6 +222,7 @@ body {
   padding-top: 6rem;
   padding-bottom: 6rem;
   position: relative;
+  overflow: hidden;
 }
 
 @media (min-width: 768px) {

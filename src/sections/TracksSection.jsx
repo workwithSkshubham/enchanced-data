@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { BrainCircuit, ShieldAlert, Cpu, Sparkles, Check, ArrowRight } from 'lucide-react';
+import { BrainCircuit, ShieldAlert, Cpu, Sparkles, ArrowRight } from 'lucide-react';
 import { EVENT_DATA } from '../data/eventData';
+import CharacterEmblem from '../components/CharacterEmblems';
 
 export default function TracksSection({ onSelectTrackForRegister }) {
   const [activeTrackId, setActiveTrackId] = useState(EVENT_DATA.tracks[0].id);
@@ -26,6 +27,9 @@ export default function TracksSection({ onSelectTrackForRegister }) {
 
   return (
     <section id="tracks" className="section-spacing tracks-section" aria-label="Hackathon Tracks">
+      {/* Doctor Strange Mystical Portal Sigil */}
+      <CharacterEmblem type="strange" slotClass="slot-strange" />
+
       <div className="vault-container">
         {/* Section Header */}
         <div className="section-meta-header">

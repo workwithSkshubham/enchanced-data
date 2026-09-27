@@ -1,3 +1,4 @@
 /* VIBRANIUM VAULT — Global Stylesheet Aggregator */
 @import './styles/main.css';
 @import './styles/sections.css';
+@import './styles/effects.css';

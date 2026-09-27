@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { QrCode, Sparkles, Shield, Download, Check, Share2 } from 'lucide-react';
+import { QrCode, Sparkles, Shield, Check, Share2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { EVENT_DATA } from '../data/eventData';
 
@@ -53,11 +53,27 @@ export default function TicketPassGenerator({ onOpenFullForm, initialTrack = 'Ne
     onOpenFullForm({ name: attendeeName, track: selectedTrack });
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     const text = `I'm attending VIBRANIUM VAULT 2026 at Bennett University! Register your pass now: ${window.location.href}`;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(text);
-      setIsCopied(true);
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        setIsCopied(true);
+      } else {
+        // Fallback for non-secure contexts (e.g. plain http previews)
+        const tempArea = document.createElement('textarea');
+        tempArea.value = text;
+        tempArea.style.position = 'fixed';
+        tempArea.style.opacity = '0';
+        document.body.appendChild(tempArea);
+        tempArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempArea);
+        setIsCopied(true);
+      }
+    } catch {
+      // Clipboard unavailable — do not crash, just skip the confirmation
+    } finally {
       setTimeout(() => setIsCopied(false), 2000);
     }
   };

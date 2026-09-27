@@ -16,12 +16,16 @@ import FAQSection from './sections/FAQSection';
 import FooterSection from './sections/FooterSection';
 
 import { useSoundFX } from './hooks/useSoundFX';
+import { useScrollReveal } from './animations/scrollReveal';
 
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [registrationInitialData, setRegistrationInitialData] = useState({});
   const { isAudioEnabled, toggleAudio, playClick } = useSoundFX();
+
+  // Global GSAP + ScrollTrigger vault-unlock reveal system
+  useScrollReveal();
 
   const handleOpenRegister = (data = {}) => {
     playClick(1050, 'sine', 0.05);
@@ -46,6 +50,13 @@ export default function App() {
         <div className="aurora-orb aurora-orb-3" />
       </div>
 
+      {/* Subtle Cinematic Background Atmosphere (silhouettes + vignette) */}
+      <div className="cinematic-bg-layer" aria-hidden="true">
+        <div className="cine-silhouette cine-2" />
+        <div className="cine-silhouette cine-1" />
+        <div className="cine-vignette" />
+      </div>
+
       {/* Desktop Custom Cursor */}
       <CustomCursor />
 
@@ -58,7 +69,7 @@ export default function App() {
 
       {/* Main Sections */}
       <main id="main-content">
-        <HeroSection onOpenRegister={() => handleOpenRegister()} />
+        <HeroSection onOpenRegister={() => handleOpenRegister()} introDone={!loading} />
         <AboutSection onOpenRegister={() => handleOpenRegister()} />
         <HighlightsSection onOpenRegister={() => handleOpenRegister()} />
         <TracksSection onSelectTrackForRegister={handleSelectTrack} />

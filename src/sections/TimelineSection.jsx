@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Calendar, Clock, MapPin, Download, CheckCircle, ChevronDown } from 'lucide-react';
+import { Clock, MapPin, Download, ChevronDown } from 'lucide-react';
 import { EVENT_DATA } from '../data/eventData';
+import CharacterEmblem from '../components/CharacterEmblems';
 
 export default function TimelineSection() {
   const [activeDay, setActiveDay] = useState('day1');
@@ -39,6 +40,9 @@ END:VCALENDAR`;
 
   return (
     <section id="timeline" className="section-spacing timeline-section" aria-label="Event Timeline">
+      {/* Captain America Tactical Shield Sigil */}
+      <CharacterEmblem type="captain" slotClass="slot-captain" />
+
       <div className="vault-container">
         {/* Section Header */}
         <div className="section-meta-header">
