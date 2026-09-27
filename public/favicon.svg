@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Vibranium Core Icon: Concentric Hexagonal Rune Matrix -->
+  <defs>
+    <linearGradient id="coreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#19E68C"/>
+      <stop offset="50%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#FF8A3D"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#080A0C"/>
+  <rect x="1" y="1" width="62" height="62" rx="13" stroke="rgba(25, 230, 140, 0.3)" stroke-width="1.5"/>
+  <!-- Outer Ring -->
+  <circle cx="32" cy="32" r="22" stroke="url(#coreGrad)" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.8"/>
+  <!-- Hexagon Core -->
+  <polygon points="32,16 45,24 45,40 32,48 19,40 19,24" stroke="#19E68C" stroke-width="1.5" fill="none"/>
+  <!-- Inner Diamond -->
+  <polygon points="32,22 40,32 32,42 24,32" stroke="#8B5CF6" stroke-width="1.5" fill="none"/>
+  <!-- Central Spark -->
+  <circle cx="32" cy="32" r="3.5" fill="#19E68C" filter="url(#glow)"/>
+  <circle cx="32" cy="32" r="1.5" fill="#FFFFFF"/>
+</svg>
